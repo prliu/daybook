@@ -1,0 +1,30 @@
+<resources>
+
+    <string name="app_name">日記帳</string>
+    <string name="title_activity_main">日記帳</string>
+    <string name="title_activity_item_form">新增項目</string>
+    <string name="date">日期</string>
+    <string name="title">項目</string>
+    <string name="amount">金額</string>
+    <string name="note">備註</string>
+    <string name="add">新增</string>
+    <string name="price">Price</string>
+    <string name="item">Item</string>
+    <string name="dollar_sign">$</string>
+    <string name="delete">刪除</string>
+    <string name="save">儲存</string>
+    <string name="previous">上個月</string>
+    <string name="next">下個月</string>
+    <string name="current">本月</string>
+    <string name="edit">編輯</string>
+    <string name="daily_sum">本日小計</string>
+    <string name="statistics">統計</string>
+    <string name="data">資料</string>
+    <string name="import_db">匯入資料庫</string>
+    <string name="export_db">匯出資料庫</string>
+    <string name="export_xls">匯出XLS檔</string>
+    <string name="done">完成</string>
+    <string name="are_you_sure">你確定嗎？</string>
+    <string name="about">關於</string>
+
+</resources>
