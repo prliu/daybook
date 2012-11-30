@@ -1,8 +1,10 @@
 package tw.com.sunnybay.daybook;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import tw.com.sunnybay.daybook.db.DaybookDBHelper;
@@ -44,12 +46,10 @@ public class StatisticsActivity extends Activity {
 		return super.onOptionsItemSelected(item);
 	}
 
-	private Map<String, Float> getKeyValuePair(Date date) {
+	private List<KeyValuePair<String, Float>> getKeyValuePair(Date date) {
 		
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(date);
-
-		HashMap<String, Float> map = new HashMap<String, Float>();
 
 		SQLiteDatabase db = helper.getReadableDatabase();
 
@@ -68,20 +68,21 @@ public class StatisticsActivity extends Activity {
 		sql = String.format(
 				"SELECT _ITEM, SUM(_AMOUNT) AS _SUM FROM TICK\n" +
 				"WHERE _DATE LIKE '%d-%02d%%'\n" +
-				"GROUP BY _ITEM ORDER BY _SUM DESC",
+				"GROUP BY _ITEM ORDER BY _SUM",
 				calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH) + 1);
 		
 		cursor = db.rawQuery(sql, null);
 		cursor.moveToFirst();
+		ArrayList<KeyValuePair<String, Float>> list = new ArrayList<KeyValuePair<String,Float>>();
 		while(!cursor.isAfterLast()) {
-			map.put(cursor.getString(0), cursor.getFloat(1) / sum);
+			list.add(new KeyValuePair<String, Float>(cursor.getString(0), cursor.getFloat(1) / sum));
 			cursor.moveToNext();
 		}
 		cursor.close();
 		
 		db.close();
 
-		return map;
+		return list;
 	}
 
 }
