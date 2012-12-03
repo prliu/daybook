@@ -1,8 +1,10 @@
 package tw.com.sunnybay.daybook;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import tw.com.sunnybay.daybook.db.DaybookDBHelper;
@@ -44,12 +46,10 @@ public class StatisticsActivity extends Activity {
 		return super.onOptionsItemSelected(item);
 	}
 
-	private Map<String, Float> getKeyValuePair(Date date) {
+	private List<KeyValuePair<String, Float>> getKeyValuePair(Date date) {
 		
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(date);
-
-		HashMap<String, Float> map = new HashMap<String, Float>();
 
 		SQLiteDatabase db = helper.getReadableDatabase();
 
@@ -73,15 +73,19 @@ public class StatisticsActivity extends Activity {
 		
 		cursor = db.rawQuery(sql, null);
 		cursor.moveToFirst();
+		ArrayList<KeyValuePair<String, Float>> list = new ArrayList<KeyValuePair<String,Float>>();
 		while(!cursor.isAfterLast()) {
-			map.put(cursor.getString(0), cursor.getFloat(1) / sum);
+			
+			KeyValuePair<String, Float> pair = new KeyValuePair<String, Float>(cursor.getString(0), cursor.getFloat(1) / sum);
+			list.add(pair);
+			
 			cursor.moveToNext();
 		}
 		cursor.close();
 		
 		db.close();
 
-		return map;
+		return list;
 	}
 
 }
