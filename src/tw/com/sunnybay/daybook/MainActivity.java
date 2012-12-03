@@ -1,6 +1,7 @@
 package tw.com.sunnybay.daybook;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Calendar;
 
 import tw.com.sunnybay.daybook.db.DaybookDBHelper;
@@ -51,6 +52,14 @@ public class MainActivity extends Activity {
 
 		app_dir = new File(Environment.getExternalStorageDirectory(),
 				getString(R.string.app_name));
+		if (!app_dir.exists()) {
+			if (!app_dir.mkdir()) {
+				String msg = String.format(
+						getString(R.string.cannot_create_dir),
+						app_dir.getName());
+				Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
+			}
+		}
 
 		ListView list = (ListView) findViewById(R.id.listView1);
 		registerForContextMenu(list);

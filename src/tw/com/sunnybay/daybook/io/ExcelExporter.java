@@ -81,6 +81,8 @@ public class ExcelExporter extends Thread {
 					Toast.LENGTH_SHORT).show();
 
 		} catch (IOException e) {
+			Toast.makeText(context, context.getString(R.string.cannot_export_xls),
+					Toast.LENGTH_SHORT).show();
 			Log.d(null, e.getMessage());
 		} finally {
 			try {
@@ -91,9 +93,6 @@ public class ExcelExporter extends Thread {
 			} catch (IOException e) {
 				Log.d(null, e.getMessage());
 			}
-
-			Toast.makeText(context, context.getString(R.string.done),
-					Toast.LENGTH_SHORT).show();
 		}
 
 	}

@@ -36,5 +36,7 @@
     <string name="copyright">Copyright 2012 by Paladin R. Liu. All Rights Reserved.</string>
     <string name="about">About</string>
     <string name="version">Version</string>
+    <string name="cannot_create_dir">Can\'t create directory: %s.</string>
+    <string name="cannot_export_xls">Can\'t export EXCEL file.</string>
 
 </resources>
