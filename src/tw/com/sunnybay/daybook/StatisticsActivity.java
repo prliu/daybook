@@ -47,7 +47,7 @@ public class StatisticsActivity extends Activity {
 	}
 
 	private List<KeyValuePair<String, Float>> getKeyValuePair(Date date) {
-		
+
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(date);
 
@@ -65,24 +65,21 @@ public class StatisticsActivity extends Activity {
 		}
 		cursor.close();
 
-		sql = String.format(
-				"SELECT _ITEM, SUM(_AMOUNT) AS _SUM FROM TICK\n" +
-				"WHERE _DATE LIKE '%d-%02d%%'\n" +
-				"GROUP BY _ITEM ORDER BY _SUM DESC",
-				calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH) + 1);
-		
+		sql = String.format("SELECT _ITEM, SUM(_AMOUNT) AS _SUM FROM TICK\n"
+				+ "WHERE _DATE LIKE '%d-%02d%%'\n"
+				+ "GROUP BY _ITEM ORDER BY _SUM", calendar.get(Calendar.YEAR),
+				calendar.get(Calendar.MONTH) + 1);
+
 		cursor = db.rawQuery(sql, null);
 		cursor.moveToFirst();
-		ArrayList<KeyValuePair<String, Float>> list = new ArrayList<KeyValuePair<String,Float>>();
-		while(!cursor.isAfterLast()) {
-			
-			KeyValuePair<String, Float> pair = new KeyValuePair<String, Float>(cursor.getString(0), cursor.getFloat(1) / sum);
-			list.add(pair);
-			
+		ArrayList<KeyValuePair<String, Float>> list = new ArrayList<KeyValuePair<String, Float>>();
+		while (!cursor.isAfterLast()) {
+			list.add(new KeyValuePair<String, Float>(cursor.getString(0),
+					cursor.getFloat(1) / sum));
 			cursor.moveToNext();
 		}
 		cursor.close();
-		
+
 		db.close();
 
 		return list;

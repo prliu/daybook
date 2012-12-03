@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
     <item android:id="@+id/menu_item_current" android:title="@string/current"></item>
-    <item android:id="@+id/menu_item_statistics" android:title="@string/statistics" android:visible="false"></item>
+    <item android:id="@+id/menu_item_statistics" android:title="@string/statistics"></item>
     <item android:id="@+id/menu_item_data" android:title="@string/data">
         <menu>
             <item android:id="@+id/menu_subitem_import_db" android:title="@string/import_db"/>

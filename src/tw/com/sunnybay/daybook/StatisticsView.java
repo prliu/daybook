@@ -8,7 +8,6 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
-import android.util.Log;
 import android.view.View;
 
 public class StatisticsView extends View {
@@ -16,7 +15,7 @@ public class StatisticsView extends View {
 	Paint paint = new Paint();
 	RectF oval;
 
-	int[] colorIndex = { 0xffff0000, 0xff00ff00, 0xff0000ff, 0xffffcc00,
+	int[] colorTable = { 0xffff0000, 0xff00ff00, 0xff0000ff, 0xffffcc00,
 			0xffff00cc, 0xffccff00, 0xff00ffcc, 0xffcc00ff, 0xff00ccff,
 			0xffffff00, 0xffff00ff, 0xff00ffff, 0xffffffcc, 0xffffccff,
 			0xffccffff, 0xffff9900, 0xffff0099, 0xff99ff00, 0xff00ff99,
@@ -49,12 +48,11 @@ public class StatisticsView extends View {
 
 		Iterator<KeyValuePair<String, Float>> iter = list.iterator();
 		while (iter.hasNext()) {
-
 			KeyValuePair<String, Float> pair = iter.next();
 			float percent = pair.value;
 
-			if (index < colorIndex.length) {
-				paint.setColor(colorIndex[index]);
+			if (index < colorTable.length) {
+				paint.setColor(colorTable[index]);
 			} else {
 				paint.setColor(Color.LTGRAY);
 			}
