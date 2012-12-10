@@ -3,9 +3,7 @@ package tw.com.sunnybay.daybook;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import tw.com.sunnybay.daybook.db.DaybookDBHelper;
 
@@ -14,9 +12,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 
 public class StatisticsActivity extends Activity {
 

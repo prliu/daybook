@@ -33,7 +33,6 @@ public class DaybookDBHelper extends SQLiteOpenHelper {
 		if (newVersion > oldVersion) {
 			switch (oldVersion) {
 			case 1:
-				// Migrate old data.
 				String sql = String.format(
 						"ALTER TABLE %s ADD COLUMN _PAYMENT CHAR(1)",
 						DaybookDBHelper.TABLE_NAME);
