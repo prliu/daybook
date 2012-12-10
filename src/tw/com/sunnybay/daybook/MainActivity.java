@@ -196,7 +196,7 @@ public class MainActivity extends Activity {
 	private void setListener() {
 
 		// Construct Add Button
-		Button btnAdd = (Button) findViewById(R.id.button1);
+		Button btnAdd = (Button) findViewById(R.id.btnAdd);
 		btnAdd.setOnClickListener(new View.OnClickListener() {
 
 			public void onClick(View v) {
@@ -219,9 +219,9 @@ public class MainActivity extends Activity {
 		TextView txtMonth = (TextView) findViewById(R.id.txtMonth);
 		txtMonth.setText(dateStr);
 
-		String sql = String.format("SELECT SUM(_AMOUNT) AS _TOTAL FROM TICK\n"
-				+ "WHERE _DATE LIKE '%d-%02d%%'", calendar.get(Calendar.YEAR),
-				calendar.get(Calendar.MONTH) + 1);
+		String sql = String.format("SELECT SUM(_AMOUNT) AS _TOTAL FROM %s\n"
+				+ "WHERE _DATE LIKE '%d-%02d%%'", DaybookDBHelper.TABLE_NAME,
+				calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH) + 1);
 
 		SQLiteDatabase db = helper.getReadableDatabase();
 		Cursor c = db.rawQuery(sql, null);
@@ -284,10 +284,10 @@ public class MainActivity extends Activity {
 		 * Get item list of this month.
 		 */
 		String sql = String.format(
-				"SELECT _ID _id, _DATE, _ITEM, _AMOUNT FROM TICK\n"
+				"SELECT _ID _id, _DATE, _ITEM, _AMOUNT FROM %s\n"
 						+ "WHERE _DATE LIKE '%d-%02d%%'\n"
-						+ "ORDER BY _DATE DESC", calendar.get(Calendar.YEAR),
-				calendar.get(Calendar.MONDAY) + 1);
+						+ "ORDER BY _DATE DESC", DaybookDBHelper.TABLE_NAME,
+				calendar.get(Calendar.YEAR), calendar.get(Calendar.MONDAY) + 1);
 
 		return database.rawQuery(sql, null);
 
@@ -306,7 +306,8 @@ public class MainActivity extends Activity {
 
 		SQLiteDatabase db = helper.getWritableDatabase();
 
-		String sql = "DELETE FROM TICK WHERE _ID = " + id;
+		String sql = String.format("DELETE FROM %s WHERE _ID = %d",
+				DaybookDBHelper.TABLE_NAME, id);
 
 		db.execSQL(sql);
 		db.close();
@@ -327,8 +328,9 @@ public class MainActivity extends Activity {
 	private void showDailySum(long id) {
 
 		SQLiteDatabase db = helper.getReadableDatabase();
-		String sql = "SELECT SUM(_AMOUNT) FROM TICK WHERE _DATE=("
-				+ "SELECT _DATE FROM TICK WHERE _ID=" + id + ")";
+		String sql = String.format("SELECT SUM(_AMOUNT) FROM %s WHERE _DATE=("
+				+ "SELECT _DATE FROM TICK WHERE _ID=%d",
+				DaybookDBHelper.TABLE_NAME, id);
 		Cursor cursor = db.rawQuery(sql, null);
 
 		cursor.moveToFirst();

@@ -35,16 +35,16 @@ public class StatisticsActivity extends Activity {
 
 	}
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.activity_statistics, menu);
-		return true;
-	}
+	// @Override
+	// public boolean onCreateOptionsMenu(Menu menu) {
+	// getMenuInflater().inflate(R.menu.activity_statistics, menu);
+	// return true;
+	// }
 
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		return super.onOptionsItemSelected(item);
-	}
+	// @Override
+	// public boolean onOptionsItemSelected(MenuItem item) {
+	// return super.onOptionsItemSelected(item);
+	// }
 
 	private List<KeyValuePair<String, Float>> getKeyValuePair(Date date) {
 
@@ -54,8 +54,9 @@ public class StatisticsActivity extends Activity {
 		SQLiteDatabase db = helper.getReadableDatabase();
 
 		String sql = String.format(
-				"SELECT SUM(_AMOUNT) FROM TICK WHERE _DATE LIKE '%d-%02d%%'",
-				calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH) + 1);
+				"SELECT SUM(_AMOUNT) FROM %s WHERE _DATE LIKE '%d-%02d%%'",
+				DaybookDBHelper.TABLE_NAME, calendar.get(Calendar.YEAR),
+				calendar.get(Calendar.MONTH) + 1);
 
 		int sum = 0;
 		Cursor cursor = db.rawQuery(sql, null);
@@ -65,9 +66,10 @@ public class StatisticsActivity extends Activity {
 		}
 		cursor.close();
 
-		sql = String.format("SELECT _ITEM, SUM(_AMOUNT) AS _SUM FROM TICK\n"
+		sql = String.format("SELECT _ITEM, SUM(_AMOUNT) AS _SUM FROM %s\n"
 				+ "WHERE _DATE LIKE '%d-%02d%%'\n"
-				+ "GROUP BY _ITEM ORDER BY _SUM", calendar.get(Calendar.YEAR),
+				+ "GROUP BY _ITEM ORDER BY _SUM DESC",
+				DaybookDBHelper.TABLE_NAME, calendar.get(Calendar.YEAR),
 				calendar.get(Calendar.MONTH) + 1);
 
 		cursor = db.rawQuery(sql, null);
