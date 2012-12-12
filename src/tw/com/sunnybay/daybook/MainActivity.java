@@ -2,6 +2,7 @@ package tw.com.sunnybay.daybook;
 
 import java.io.File;
 import java.util.Calendar;
+import java.util.Locale;
 
 import tw.com.sunnybay.daybook.db.DaybookDBHelper;
 import tw.com.sunnybay.daybook.io.ExcelExporter;
@@ -214,14 +215,14 @@ public class MainActivity extends Activity {
 	private void setMonthlyAmount() {
 
 		// Set month
-		String dateStr = String.format("%d-%02d", calendar.get(Calendar.YEAR),
-				calendar.get(Calendar.MONTH) + 1);
+		String dateStr = String.format(Locale.getDefault(), "%tY-%tm",
+				calendar, calendar);
 		TextView txtMonth = (TextView) findViewById(R.id.txtMonth);
 		txtMonth.setText(dateStr);
 
 		String sql = String.format("SELECT SUM(_AMOUNT) AS _TOTAL FROM %s\n"
-				+ "WHERE _DATE LIKE '%d-%02d%%'", DaybookDBHelper.TABLE_NAME,
-				calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH) + 1);
+				+ "WHERE _DATE LIKE '%tY-%tm%%'", DaybookDBHelper.TABLE_NAME,
+				calendar, calendar);
 
 		SQLiteDatabase db = helper.getReadableDatabase();
 		Cursor c = db.rawQuery(sql, null);
@@ -285,9 +286,9 @@ public class MainActivity extends Activity {
 		 */
 		String sql = String.format(
 				"SELECT _ID _id, _DATE, _ITEM, _AMOUNT FROM %s\n"
-						+ "WHERE _DATE LIKE '%d-%02d%%'\n"
+						+ "WHERE _DATE LIKE '%tY-%tm%%'\n"
 						+ "ORDER BY _DATE DESC", DaybookDBHelper.TABLE_NAME,
-				calendar.get(Calendar.YEAR), calendar.get(Calendar.MONDAY) + 1);
+				calendar, calendar);
 
 		return database.rawQuery(sql, null);
 

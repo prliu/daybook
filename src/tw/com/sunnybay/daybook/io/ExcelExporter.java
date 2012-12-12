@@ -42,10 +42,10 @@ public class ExcelExporter extends Thread {
 		 * Get item list of this month.
 		 */
 		String sql = String.format(
-				"SELECT _DATE, _ITEM, _AMOUNT, _NOTE FROM TICK\n"
-						+ "WHERE _DATE LIKE '%d-%02d%%'\n"
-						+ "ORDER BY _DATE DESC", calendar.get(Calendar.YEAR),
-				calendar.get(Calendar.MONDAY) + 1);
+				"SELECT _DATE, _ITEM, _AMOUNT, _NOTE FROM %s\n"
+						+ "WHERE _DATE LIKE '%tY-%tm%%'\n"
+						+ "ORDER BY _DATE DESC", DaybookDBHelper.TABLE_NAME,
+				calendar, calendar);
 
 		Workbook wb = new HSSFWorkbook();
 
@@ -81,7 +81,8 @@ public class ExcelExporter extends Thread {
 					Toast.LENGTH_SHORT).show();
 
 		} catch (IOException e) {
-			Toast.makeText(context, context.getString(R.string.cannot_export_xls),
+			Toast.makeText(context,
+					context.getString(R.string.cannot_export_xls),
 					Toast.LENGTH_SHORT).show();
 			Log.d(null, e.getMessage());
 		} finally {

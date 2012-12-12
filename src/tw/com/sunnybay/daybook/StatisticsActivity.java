@@ -49,9 +49,8 @@ public class StatisticsActivity extends Activity {
 		SQLiteDatabase db = helper.getReadableDatabase();
 
 		String sql = String.format(
-				"SELECT SUM(_AMOUNT) FROM %s WHERE _DATE LIKE '%d-%02d%%'",
-				DaybookDBHelper.TABLE_NAME, calendar.get(Calendar.YEAR),
-				calendar.get(Calendar.MONTH) + 1);
+				"SELECT SUM(_AMOUNT) FROM %s WHERE _DATE LIKE '%tY-%tm%%'",
+				DaybookDBHelper.TABLE_NAME, calendar, calendar);
 
 		int sum = 0;
 		Cursor cursor = db.rawQuery(sql, null);
@@ -62,10 +61,9 @@ public class StatisticsActivity extends Activity {
 		cursor.close();
 
 		sql = String.format("SELECT _ITEM, SUM(_AMOUNT) AS _SUM FROM %s\n"
-				+ "WHERE _DATE LIKE '%d-%02d%%'\n"
+				+ "WHERE _DATE LIKE '%tY-%tm%%'\n"
 				+ "GROUP BY _ITEM ORDER BY _SUM DESC",
-				DaybookDBHelper.TABLE_NAME, calendar.get(Calendar.YEAR),
-				calendar.get(Calendar.MONTH) + 1);
+				DaybookDBHelper.TABLE_NAME, calendar, calendar);
 
 		cursor = db.rawQuery(sql, null);
 		cursor.moveToFirst();

@@ -20,8 +20,6 @@ import android.widget.Toast;
 
 public class ItemFormActivity extends Activity {
 
-	static final String TABLE_NAME = "TICK";
-
 	boolean isNew = true;
 	long id = -1;
 
@@ -120,10 +118,10 @@ public class ItemFormActivity extends Activity {
 		values.put("_NOTE", fldNote.getText().toString());
 
 		if (isNew) {
-			db.insertOrThrow(ItemFormActivity.TABLE_NAME, null, values);
+			db.insertOrThrow(DaybookDBHelper.TABLE_NAME, null, values);
 		} else {
 			values.put("_ID", id);
-			db.replaceOrThrow(ItemFormActivity.TABLE_NAME, null, values);
+			db.replaceOrThrow(DaybookDBHelper.TABLE_NAME, null, values);
 		}
 		db.close();
 
@@ -181,18 +179,16 @@ public class ItemFormActivity extends Activity {
 
 			// Set default date.
 			Calendar calendar = Calendar.getInstance();
-			String dateStr = String.format("%d-%02d-%02d",
-					Integer.valueOf(calendar.get(Calendar.YEAR)),
-					Integer.valueOf(calendar.get(Calendar.MONTH) + 1),
-					Integer.valueOf(calendar.get(Calendar.DAY_OF_MONTH)));
+			String dateStr = String.format("%tY-%tm-%td", calendar, calendar,
+					calendar);
 
 			fldDate.setText(dateStr);
 
 		} else {
 
 			SQLiteDatabase db = helper.getReadableDatabase();
-			String sql = "SELECT * FROM " + ItemFormActivity.TABLE_NAME
-					+ " WHERE _ID = " + id;
+			String sql = String.format("SELECT * FROM %s WHERE _ID=%d",
+					DaybookDBHelper.TABLE_NAME, id);
 			Cursor c = db.rawQuery(sql, null);
 			c.moveToFirst();
 			if (!c.isAfterLast()) {
