@@ -17,14 +17,9 @@ public class StatisticsView extends View {
 
 	private boolean isPortrait = false;
 
-	int[] colorTable = { 0xffff0000, 0xff00ff00, 0xff0000ff, 0xffffcc00,
-			0xffff00cc, 0xffccff00, 0xff00ffcc, 0xffcc00ff, 0xff00ccff,
-			0xffffff00, 0xffff00ff, 0xff00ffff, 0xffff9900, 0xffff0099,
-			0xff99ff00, 0xff00ff99, 0xffffcc99, 0xffff99cc, 0xffccff99,
-			0xff99ffcc, 0xffff9999, 0xff99ff99, 0xff9999ff, 0xffcc0000,
-			0xff00cc00, 0xff0000cc, 0xffcc9900, 0xffcc0099, 0xff99cc00,
-			0xff00cc99, 0xff9900cc, 0xff0099cc, 0xffcccc99, 0xffcc99cc,
-			0xff99cccc, 0xffcc9999, 0xff99cc99, 0xff9999cc };
+	int[] colorTable = { 0xff8a56e2, 0xffcf56e2, 0xffe256ae, 0xffe25668,
+			0xffe28956, 0xffe2cf56, 0xffaee256, 0xff68e256, 0xff46d279,
+			0xff56aee2, 0xff5668e2 };
 
 	private List<KeyValuePair<String, Float>> list = null;
 
@@ -55,11 +50,12 @@ public class StatisticsView extends View {
 
 		int index = 0;
 		float angle = 0;
-		
+		boolean showDetail = true;
+
 		float x, y;
 		int step = 16;
-		
-		if(isPortrait) {
+
+		if (isPortrait) {
 			x = step;
 			y = oval.bottom + step;
 		} else {
@@ -77,13 +73,18 @@ public class StatisticsView extends View {
 			if (index < colorTable.length) {
 				paint.setColor(colorTable[index]);
 			} else {
-				paint.setColor(Color.GRAY);
+				showDetail = false;
 			}
 
 			float sweep = 360 * percent;
-			if (percent >= 0.005f) {
+			if (percent < 0.005f) {
+				showDetail = false;
+			}
+			
+			if(showDetail) {
 				canvas.drawText(pair.key, x, y, paint);
-				canvas.drawText(String.format("%.2f%%", pair.value * 100), x + 100, y, paint);
+				canvas.drawText(String.format("%.2f%%", pair.value * 100),
+						x + 100, y, paint);
 				canvas.drawArc(oval, angle, sweep, true, paint);
 				angle += sweep;
 				index++;
@@ -94,7 +95,8 @@ public class StatisticsView extends View {
 				paint.setColor(Color.LTGRAY);
 				sweep = 360 - angle;
 				canvas.drawText("Other", x, y, paint);
-				canvas.drawText(String.format("%.2f%%", (sweep / 360) * 100), x + 100, y, paint);
+				canvas.drawText(String.format("%.2f%%", (sweep / 360) * 100),
+						x + 100, y, paint);
 				canvas.drawArc(oval, angle, sweep, true, paint);
 				break;
 			}

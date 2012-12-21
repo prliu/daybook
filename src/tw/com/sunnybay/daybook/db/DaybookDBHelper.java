@@ -21,7 +21,7 @@ public class DaybookDBHelper extends SQLiteOpenHelper {
 		String sql = String
 				.format("CREATE TABLE %s ("
 						+ "_ID INTEGER PRIMARY KEY AUTOINCREMENT, _DATE DATE, _ITEM VARCHAR(50),"
-						+ "_PAYMENT CHAR(1),_AMOUNT NUMBER, _NOTE VARCHAR(255))",
+						+ "_AMOUNT NUMBER, _NOTE VARCHAR(255), _PAYMENT CHAR(1))",
 						DaybookDBHelper.TABLE_NAME);
 
 		db.execSQL(sql);
@@ -38,8 +38,6 @@ public class DaybookDBHelper extends SQLiteOpenHelper {
 						DaybookDBHelper.TABLE_NAME);
 				db.execSQL(sql);
 			}
-		} else {
-			onCreate(db);
 		}
 
 	}

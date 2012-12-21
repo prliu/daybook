@@ -330,7 +330,7 @@ public class MainActivity extends Activity {
 
 		SQLiteDatabase db = helper.getReadableDatabase();
 		String sql = String.format("SELECT SUM(_AMOUNT) FROM %s WHERE _DATE=("
-				+ "SELECT _DATE FROM TICK WHERE _ID=%d",
+				+ "SELECT _DATE FROM TICK WHERE _ID=%d)",
 				DaybookDBHelper.TABLE_NAME, id);
 		Cursor cursor = db.rawQuery(sql, null);
 
