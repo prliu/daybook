@@ -14,7 +14,7 @@
     <application
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme">
         <activity
             android:name="tw.com.sunnybay.daybook.MainActivity"
             android:label="@string/title_activity_main" >
@@ -34,6 +34,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="tw.com.sunnybay.daybook.MainActivity" />
         </activity>
+        <activity android:name="tw.com.sunnybay.daybook.HelpActivity"></activity>
     </application>
 
 </manifest>

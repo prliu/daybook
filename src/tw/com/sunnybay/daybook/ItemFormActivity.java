@@ -76,7 +76,7 @@ public class ItemFormActivity extends Activity {
 			}
 		});
 
-		Button btnCancel = (Button) findViewById(R.id.button1);
+		Button btnCancel = (Button) findViewById(R.id.btnCancel);
 		btnCancel.setOnClickListener(new View.OnClickListener() {
 
 			public void onClick(View v) {
@@ -84,8 +84,8 @@ public class ItemFormActivity extends Activity {
 			}
 		});
 
-		Button btnAdd = (Button) findViewById(R.id.button2);
-		btnAdd.setOnClickListener(new View.OnClickListener() {
+		Button btnSave = (Button) findViewById(R.id.btnSave);
+		btnSave.setOnClickListener(new View.OnClickListener() {
 
 			public void onClick(View v) {
 				onSaveClicked(v);
@@ -105,12 +105,13 @@ public class ItemFormActivity extends Activity {
 		SQLiteDatabase db = helper.getWritableDatabase();
 
 		int amount = 0;
+
 		try {
 			amount = Integer.parseInt(fldAmount.getText().toString());
 		} catch (NumberFormatException e) {
 			Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
 		}
-
+		
 		ContentValues values = new ContentValues();
 		values.put("_DATE", fldDate.getText().toString());
 		values.put("_ITEM", fldTitle.getText().toString());
@@ -128,23 +129,6 @@ public class ItemFormActivity extends Activity {
 		finish();
 
 	}
-
-	// private boolean isDateValid(String dateString) {
-	//
-	// boolean result = false;
-	//
-	// String expression =
-	// "(19|20)\\d\\d([-/])(0[1-9]|1[012])\\2(0[1-9]|[12][0-9]|3[01])";
-	// Pattern pattern = Pattern.compile(expression);
-	// Matcher matcher = pattern.matcher(dateString);
-	// if (matcher.matches())
-	// result = true;
-	// else
-	// Toast.makeText(this, "Wrong date format.", Toast.LENGTH_LONG)
-	// .show();
-	//
-	// return result;
-	// }
 
 	private void showDialog() {
 

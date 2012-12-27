@@ -142,6 +142,9 @@ public class MainActivity extends Activity {
 		case R.id.menu_item_about:
 			about();
 			break;
+		case R.id.menu_item_help:
+			help();
+			break;
 		default:
 			result = super.onOptionsItemSelected(item);
 		}
@@ -387,5 +390,10 @@ public class MainActivity extends Activity {
 		dialog.setTitle(getString(R.string.about));
 		dialog.show();
 
+	}
+	
+	private void help() {
+		Intent intent = new Intent(this, HelpActivity.class);
+		startActivity(intent);
 	}
 }
