@@ -16,6 +16,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
 public class ItemFormActivity extends Activity {
@@ -26,6 +27,7 @@ public class ItemFormActivity extends Activity {
 	DaybookDBHelper helper = new DaybookDBHelper(this);
 
 	EditText fldDate, fldTitle, fldAmount, fldNote;
+	RadioGroup radioGroup;
 
 	protected DatePickerDialog.OnDateSetListener listener = new DatePickerDialog.OnDateSetListener() {
 
@@ -111,12 +113,20 @@ public class ItemFormActivity extends Activity {
 		} catch (NumberFormatException e) {
 			Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
 		}
-		
+
 		ContentValues values = new ContentValues();
 		values.put("_DATE", fldDate.getText().toString());
 		values.put("_ITEM", fldTitle.getText().toString());
 		values.put("_AMOUNT", amount);
 		values.put("_NOTE", fldNote.getText().toString());
+		
+		switch(radioGroup.getCheckedRadioButtonId()) {
+		case R.id.radio1:
+			values.put("_PAYMENT", DaybookDBHelper.PAYMENT_CREDIT_CARD);
+			break;
+		default:
+			values.put("_PAYMENT", DaybookDBHelper.PAYMENT_CASH);
+		}
 
 		if (isNew) {
 			db.insertOrThrow(DaybookDBHelper.TABLE_NAME, null, values);
@@ -157,6 +167,8 @@ public class ItemFormActivity extends Activity {
 		fldAmount = (EditText) findViewById(R.id.editText3);
 		fldNote = (EditText) findViewById(R.id.editText4);
 
+		radioGroup = (RadioGroup) findViewById(R.id.radioGroup1);
+
 		id = intent.getLongExtra("id", -1);
 
 		if (id < 0) {
@@ -171,16 +183,26 @@ public class ItemFormActivity extends Activity {
 		} else {
 
 			SQLiteDatabase db = helper.getReadableDatabase();
-			String sql = String.format("SELECT * FROM %s WHERE _ID=%d",
-					DaybookDBHelper.TABLE_NAME, id);
+			String sql = String
+					.format("SELECT _DATE, _ITEM, _AMOUNT, _NOTE, _PAYMENT FROM %s WHERE _ID=%d",
+							DaybookDBHelper.TABLE_NAME, id);
 			Cursor c = db.rawQuery(sql, null);
 			c.moveToFirst();
 			if (!c.isAfterLast()) {
 
-				fldDate.setText(c.getString(1));
-				fldTitle.setText(c.getString(2));
-				fldAmount.setText(c.getString(3));
-				fldNote.setText(c.getString(4));
+				fldDate.setText(c.getString(0));
+				fldTitle.setText(c.getString(1));
+				fldAmount.setText(c.getString(2));
+				fldNote.setText(c.getString(3));
+
+				// Setup radio button group.
+				switch (c.getInt(4)) {
+				case DaybookDBHelper.PAYMENT_CREDIT_CARD:
+					radioGroup.check(R.id.radio1);
+					break;
+				default:
+					radioGroup.check(R.id.radio0);
+				}
 			}
 
 			c.close();

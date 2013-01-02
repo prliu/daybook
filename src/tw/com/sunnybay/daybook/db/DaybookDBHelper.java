@@ -9,6 +9,9 @@ public class DaybookDBHelper extends SQLiteOpenHelper {
 	public static final String DATABASE_NAME = "cashflow.db";
 	public static final String TABLE_NAME = "TICK";
 	public static final int DATABASE_VERSION = 2;
+	
+	public static final int PAYMENT_CASH = 0;
+	public static final int PAYMENT_CREDIT_CARD = 1;
 
 	public DaybookDBHelper(Context context) {
 		super(context, DaybookDBHelper.DATABASE_NAME, null,
