@@ -49,7 +49,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_below="@id/editText2"
-        android:text="Payment"
+        android:text="@string/payment_type"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <RadioGroup
@@ -65,13 +65,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:checked="true"
-            android:text="Cash" />
+            android:text="@string/cash" />
 
         <RadioButton
             android:id="@+id/radio1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Credit" />
+            android:text="@string/credit_card" />
     </RadioGroup>
 
     <TextView

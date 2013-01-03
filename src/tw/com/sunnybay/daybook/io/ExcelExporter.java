@@ -42,7 +42,7 @@ public class ExcelExporter extends Thread {
 		 * Get item list of this month.
 		 */
 		String sql = String.format(
-				"SELECT _DATE, _ITEM, _AMOUNT, _NOTE FROM %s\n"
+				"SELECT _DATE, _ITEM, _PAYMENT, _AMOUNT, _NOTE FROM %s\n"
 						+ "WHERE _DATE LIKE '%tY-%tm%%'\n"
 						+ "ORDER BY _DATE DESC", DaybookDBHelper.TABLE_NAME,
 				calendar, calendar);
@@ -53,8 +53,10 @@ public class ExcelExporter extends Thread {
 		Row row = sheet.createRow(0);
 		row.createCell(0).setCellValue(context.getString(R.string.date));
 		row.createCell(1).setCellValue(context.getString(R.string.title));
-		row.createCell(2).setCellValue(context.getString(R.string.amount));
-		row.createCell(3).setCellValue(context.getString(R.string.note));
+		row.createCell(2)
+				.setCellValue(context.getString(R.string.payment_type));
+		row.createCell(3).setCellValue(context.getString(R.string.amount));
+		row.createCell(4).setCellValue(context.getString(R.string.note));
 
 		try {
 			out = new FileOutputStream(file);
@@ -66,8 +68,17 @@ public class ExcelExporter extends Thread {
 				row = sheet.createRow(i);
 				row.createCell(0).setCellValue(cursor.getString(0));
 				row.createCell(1).setCellValue(cursor.getString(1));
-				row.createCell(2).setCellValue(cursor.getString(2));
+
+				switch (cursor.getInt(2)) {
+				case DaybookDBHelper.PAYMENT_CREDIT_CARD:
+					row.createCell(2).setCellValue(context.getString(R.string.credit_card));
+					break;
+				default:
+					row.createCell(2).setCellValue(context.getString(R.string.cash));
+				}
+
 				row.createCell(3).setCellValue(cursor.getString(3));
+				row.createCell(4).setCellValue(cursor.getString(4));
 				i++;
 				cursor.moveToNext();
 			}

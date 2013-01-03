@@ -10,6 +10,7 @@
     <string name="title_activity_item_form">New Transaction</string>
     <string name="date">Date</string>
     <string name="title">Title</string>
+    <string name="payment_type">Payment</string>
     <string name="amount">Amount</string>
     <string name="note">Note</string>
     <string name="add">Add</string>
@@ -38,5 +39,7 @@
     <string name="version">Version</string>
     <string name="cannot_create_dir">Can\'t create directory: %s.</string>
     <string name="cannot_export_xls">Can\'t export EXCEL file.</string>
+    <string name="cash">Cash</string>
+    <string name="credit_card">Credit Card</string>
 
 </resources>
