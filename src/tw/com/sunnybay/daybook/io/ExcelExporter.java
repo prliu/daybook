@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Calendar;
+import java.util.Locale;
 
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Row;
@@ -28,7 +29,10 @@ public class ExcelExporter extends Thread {
 	public ExcelExporter(Context context, Calendar calendar, File file) {
 		this.context = context;
 		this.calendar = calendar;
-		this.file = new File(file, "daybook.xls");
+		
+		String fileName = String.format(Locale.getDefault(), "daybook-%tY-%tm",
+				calendar, calendar);
+		this.file = new File(file, fileName);
 	}
 
 	@Override
