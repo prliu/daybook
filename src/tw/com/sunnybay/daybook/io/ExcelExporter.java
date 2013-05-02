@@ -30,7 +30,7 @@ public class ExcelExporter extends Thread {
 		this.context = context;
 		this.calendar = calendar;
 		
-		String fileName = String.format(Locale.getDefault(), "daybook-%tY-%tm",
+		String fileName = String.format(Locale.getDefault(), "daybook-%tY-%tm.xls",
 				calendar, calendar);
 		this.file = new File(file, fileName);
 	}
