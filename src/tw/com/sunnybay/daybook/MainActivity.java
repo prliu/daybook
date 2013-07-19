@@ -137,8 +137,7 @@ public class MainActivity extends Activity {
 			Toast.makeText(this, "Not implemented.", Toast.LENGTH_LONG).show();
 			break;
 		case R.id.menu_subitem_export_db:
-			// exportDB();
-			Toast.makeText(this, "Not implemented.", Toast.LENGTH_LONG).show();
+			exportDB();
 			break;
 		case R.id.menu_subitem_export_xls:
 			exportXLS();
@@ -383,23 +382,8 @@ public class MainActivity extends Activity {
 		File file = getDatabasePath(DaybookDBHelper.DATABASE_NAME);
 		File external = new File(app_dir, DaybookDBHelper.DATABASE_NAME);
 
-		// FileOperation action = new FileOperation(this, file, external);
-		// runOnUiThread(action);
-
-		SQLiteDatabase db = helper.getWritableDatabase();
-		String sql = String.format("ATTACH '%s' AS backup", external.getPath());
-		db.execSQL(sql);
-
-		sql = String.format("DROP TABLE IF EXISTS backup.TICK");
-		db.execSQL(sql);
-
-		sql = String.format("CREATE TABLE backup.TICK AS SELECT * FROM TICK");
-		db.execSQL(sql);
-
-		sql = String.format("DETACH backup");
-		db.execSQL(sql);
-
-		db.close();
+		FileOperation action = new FileOperation(this, file, external);
+		runOnUiThread(action);
 
 	}
 
