@@ -29,6 +29,6 @@
     <string name="about">关于</string>
     <string name="cash">现金</string>
     <string name="credit_card">信用卡</string>
-    
+    <string name="item_sum">项目小计</string>
 
 </resources>

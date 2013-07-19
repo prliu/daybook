@@ -359,35 +359,22 @@ public class MainActivity extends Activity {
 
 	private void showItemSum(long id) {
 
-		String item = null;
-		String date = null;
-
 		SQLiteDatabase db = helper.getReadableDatabase();
 
-		// Get item title and tick date of the Item.
-		String sql = String.format("SELECT _ITEM, _DATE FROM %s WHERE _ID=%d",
-				DaybookDBHelper.TABLE_NAME, id);
-		Cursor cursor = db.rawQuery(sql, null);
-		cursor.moveToFirst();
-		if (!cursor.isAfterLast()) {
-			item = cursor.getString(0);
-			date = cursor.getString(1);
-		}
-		cursor.close();
-
 		// Calculate summary.
-		sql = String.format(
-				"SELECT SUM(_AMOUNT) FROM %s WHERE _ITEM='%s' AND _DATE='%s'",
-				DaybookDBHelper.TABLE_NAME, item, date);
-		cursor = db.rawQuery(sql, null);
+		String sql = String.format("SELECT SUM(_AMOUNT) FROM %s\n"
+				+ "WHERE _ITEM IN (SELECT _ITEM FROM %s WHERE _ID=%d)\n"
+				+ "AND _DATE LIKE '%tY-%tm%%'", DaybookDBHelper.TABLE_NAME,
+				DaybookDBHelper.TABLE_NAME, id, calendar, calendar);
+		Cursor c = db.rawQuery(sql, null);
 
-		cursor.moveToFirst();
-		if (!cursor.isAfterLast()) {
+		c.moveToFirst();
+		if (!c.isAfterLast()) {
 			Toast.makeText(this,
-					getString(R.string.item_sum) + ":" + cursor.getInt(0),
+					getString(R.string.item_sum) + ":" + c.getInt(0),
 					Toast.LENGTH_LONG).show();
 		}
-		cursor.close();
+		c.close();
 		db.close();
 	}
 
