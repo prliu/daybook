@@ -41,5 +41,6 @@
     <string name="cannot_export_xls">Can\'t export EXCEL file.</string>
     <string name="cash">Cash</string>
     <string name="credit_card">Credit Card</string>
+    <string name="item_sum">Item Summary</string>
 
 </resources>

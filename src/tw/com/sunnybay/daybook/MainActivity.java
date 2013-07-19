@@ -17,6 +17,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.GestureDetector;
@@ -36,6 +37,7 @@ public class MainActivity extends Activity {
 
 	private DaybookDBHelper helper = new DaybookDBHelper(this);
 	private SQLiteDatabase database = null;
+	private Cursor cursor = null;
 
 	private File app_dir = null;
 
@@ -131,10 +133,12 @@ public class MainActivity extends Activity {
 			startActivity(intent);
 			break;
 		case R.id.menu_subitem_import_db:
-			importDB();
+			// importDB();
+			Toast.makeText(this, "Not implemented.", Toast.LENGTH_LONG).show();
 			break;
 		case R.id.menu_subitem_export_db:
-			exportDB();
+			// exportDB();
+			Toast.makeText(this, "Not implemented.", Toast.LENGTH_LONG).show();
 			break;
 		case R.id.menu_subitem_export_xls:
 			exportXLS();
@@ -155,9 +159,7 @@ public class MainActivity extends Activity {
 	@Override
 	protected void onDestroy() {
 
-		ListView list = (ListView) findViewById(R.id.listView1);
-		SimpleCursorAdapter adapter = (SimpleCursorAdapter) list.getAdapter();
-		adapter.getCursor().close();
+		this.cursor.close();
 
 		if (database != null) {
 			database.close();
@@ -188,6 +190,9 @@ public class MainActivity extends Activity {
 		switch (item.getItemId()) {
 		case R.id.main_menu_daily_sum:
 			showDailySum(selectedId);
+			return true;
+		case R.id.main_menu_item_sum:
+			showItemSum(selectedId);
 			return true;
 		case R.id.main_menu_delete:
 			deleteItem(selectedId);
@@ -293,7 +298,12 @@ public class MainActivity extends Activity {
 						+ "ORDER BY _DATE DESC", DaybookDBHelper.TABLE_NAME,
 				calendar, calendar);
 
-		return database.rawQuery(sql, null);
+		if (this.cursor != null)
+			this.cursor.close();
+
+		this.cursor = database.rawQuery(sql, null);
+
+		return this.cursor;
 
 	}
 
@@ -347,13 +357,63 @@ public class MainActivity extends Activity {
 		db.close();
 	}
 
+	private void showItemSum(long id) {
+
+		String item = null;
+		String date = null;
+
+		SQLiteDatabase db = helper.getReadableDatabase();
+
+		// Get item title and tick date of the Item.
+		String sql = String.format("SELECT _ITEM, _DATE FROM %s WHERE _ID=%d",
+				DaybookDBHelper.TABLE_NAME, id);
+		Cursor cursor = db.rawQuery(sql, null);
+		cursor.moveToFirst();
+		if (!cursor.isAfterLast()) {
+			item = cursor.getString(0);
+			date = cursor.getString(1);
+		}
+		cursor.close();
+
+		// Calculate summary.
+		sql = String.format(
+				"SELECT SUM(_AMOUNT) FROM %s WHERE _ITEM='%s' AND _DATE='%s'",
+				DaybookDBHelper.TABLE_NAME, item, date);
+		cursor = db.rawQuery(sql, null);
+
+		cursor.moveToFirst();
+		if (!cursor.isAfterLast()) {
+			Toast.makeText(this,
+					getString(R.string.item_sum) + ":" + cursor.getInt(0),
+					Toast.LENGTH_LONG).show();
+		}
+		cursor.close();
+		db.close();
+	}
+
 	private void exportDB() {
 
 		File file = getDatabasePath(DaybookDBHelper.DATABASE_NAME);
 		File external = new File(app_dir, DaybookDBHelper.DATABASE_NAME);
 
-		FileOperation action = new FileOperation(this, file, external);
-		runOnUiThread(action);
+		// FileOperation action = new FileOperation(this, file, external);
+		// runOnUiThread(action);
+
+		SQLiteDatabase db = helper.getWritableDatabase();
+		String sql = String.format("ATTACH '%s' AS backup", external.getPath());
+		db.execSQL(sql);
+
+		sql = String.format("DROP TABLE IF EXISTS backup.TICK");
+		db.execSQL(sql);
+
+		sql = String.format("CREATE TABLE backup.TICK AS SELECT * FROM TICK");
+		db.execSQL(sql);
+
+		sql = String.format("DETACH backup");
+		db.execSQL(sql);
+
+		db.close();
+
 	}
 
 	private void importDB() {
@@ -391,7 +451,7 @@ public class MainActivity extends Activity {
 		dialog.show();
 
 	}
-	
+
 	private void help() {
 		Intent intent = new Intent(this, HelpActivity.class);
 		startActivity(intent);
