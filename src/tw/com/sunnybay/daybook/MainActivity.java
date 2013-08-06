@@ -35,13 +35,13 @@ import android.widget.Toast;
 
 public class MainActivity extends Activity {
 
+	protected long selectedId = -1;
+
 	private DaybookDBHelper helper = new DaybookDBHelper(this);
 	private SQLiteDatabase database = null;
 	private Cursor cursor = null;
 
 	private File app_dir = null;
-
-	private long selectedId = -1;
 
 	private Calendar calendar = Calendar.getInstance();
 
@@ -188,13 +188,13 @@ public class MainActivity extends Activity {
 
 		switch (item.getItemId()) {
 		case R.id.main_menu_daily_sum:
-			showDailySum(selectedId);
+			showDailySum();
 			return true;
 		case R.id.main_menu_item_sum:
-			showItemSum(selectedId);
+			showItemSum();
 			return true;
 		case R.id.main_menu_delete:
-			deleteItem(selectedId);
+			deleteItem();
 			return true;
 		}
 
@@ -315,17 +315,35 @@ public class MainActivity extends Activity {
 
 	}
 
-	private void deleteItem(long id) {
+	private void deleteItem() {
 
-		SQLiteDatabase db = helper.getWritableDatabase();
+		// Test code for delete confirmation.
+		new AlertDialog.Builder(this)
+				.setIcon(android.R.drawable.ic_dialog_alert)
+				.setTitle(R.string.delete)
+				.setMessage(R.string.are_you_sure)
+				.setPositiveButton(android.R.string.yes,
+						new DialogInterface.OnClickListener() {
 
-		String sql = String.format("DELETE FROM %s WHERE _ID = %d",
-				DaybookDBHelper.TABLE_NAME, id);
+							public void onClick(DialogInterface dialog,
+									int which) {
 
-		db.execSQL(sql);
-		db.close();
+								SQLiteDatabase db = helper
+										.getWritableDatabase();
 
-		updateList();
+								String sql = String.format(
+										"DELETE FROM %s WHERE _ID = %d",
+										DaybookDBHelper.TABLE_NAME,
+										MainActivity.this.selectedId);
+
+								db.execSQL(sql);
+								db.close();
+
+								updateList();
+
+							}
+						}).setNegativeButton(android.R.string.no, null).show();
+
 	}
 
 	private void updateList() {
@@ -338,12 +356,12 @@ public class MainActivity extends Activity {
 
 	}
 
-	private void showDailySum(long id) {
+	private void showDailySum() {
 
 		SQLiteDatabase db = helper.getReadableDatabase();
 		String sql = String.format("SELECT SUM(_AMOUNT) FROM %s WHERE _DATE=("
 				+ "SELECT _DATE FROM TICK WHERE _ID=%d)",
-				DaybookDBHelper.TABLE_NAME, id);
+				DaybookDBHelper.TABLE_NAME, selectedId);
 		Cursor cursor = db.rawQuery(sql, null);
 
 		cursor.moveToFirst();
@@ -356,7 +374,7 @@ public class MainActivity extends Activity {
 		db.close();
 	}
 
-	private void showItemSum(long id) {
+	private void showItemSum() {
 
 		SQLiteDatabase db = helper.getReadableDatabase();
 
@@ -364,7 +382,7 @@ public class MainActivity extends Activity {
 		String sql = String.format("SELECT SUM(_AMOUNT) FROM %s\n"
 				+ "WHERE _ITEM IN (SELECT _ITEM FROM %s WHERE _ID=%d)\n"
 				+ "AND _DATE LIKE '%tY-%tm%%'", DaybookDBHelper.TABLE_NAME,
-				DaybookDBHelper.TABLE_NAME, id, calendar, calendar);
+				DaybookDBHelper.TABLE_NAME, selectedId, calendar, calendar);
 		Cursor c = db.rawQuery(sql, null);
 
 		c.moveToFirst();
