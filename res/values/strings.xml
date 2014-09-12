@@ -34,7 +34,7 @@
     <string name="done">Done</string>
     <string name="are_you_sure">Are you sure?</string>
     <string name="title_activity_about">About</string>
-    <string name="copyright">Copyright 2012 by Paladin R. Liu. All Rights Reserved.</string>
+    <string name="copyright">Written by Paladin R. Liu. Released under the GPLv3 license. </string>
     <string name="about">About</string>
     <string name="version">Version</string>
     <string name="cannot_create_dir">Can\'t create directory: %s.</string>
